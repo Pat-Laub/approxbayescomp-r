@@ -1,0 +1,108 @@
+---
+title: "Poisson-Exponential Sums"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Poisson-Exponential Sums}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r create-simulator}
+poiss_exp_sums <- function(params, n, d) {
+  #' Generates a matrix of i.i.d. random sums
+  #'
+  #' @param params List of distributional arguments for the sum and summand distributions
+  #' @param n Number of samples to generate
+  #' @param d Number of random sums per sample
+  #' @return Matrix of shape n by d of i.i.d. random sums
+  
+  sum_distribution_arg <- params[[1]]
+  summand_distribution_arg <- params[[2]]
+  
+  # Create sampling functions
+  sum_sampling_fun <- rpois
+  summand_sampling_fun <- rexp
+  
+  # Initialize empty matrix to store samples
+  samples <- matrix(numeric(n*d), n, d)
+  
+  # Iterate over number of samples
+  for(i in 1:n) {
+    for(j in 1:d){
+      num_summands <- sum_sampling_fun(1, sum_distribution_arg)
+      samples[i,j] <- sum(summand_sampling_fun(num_summands, summand_distribution_arg))
+    }
+  }
+  
+  return(samples)
+}
+```
+
+
+```{r test-simulator}
+poiss_exp_sums(as.numeric(c(10, 20)), 3, 2)
+```
+
+```{r create-observed-data}
+set.seed(1234)
+
+true_theta <- c(2, 8)
+d <- 100
+obs_data <- poiss_exp_sums(true_theta, 1, d)
+
+obs_data
+```
+
+```{r setup-prior}
+
+priors <- list(list(name = "exp", args = list(rate = 0.1)),
+               list(name = "unif", args = list(min = 0, max = 10)))
+
+```
+
+```{r setup-other-abc-params}
+library(approxbayescomp)
+
+n_particles <- 1000
+dist <- euclidean_distance
+```
+
+```{r run-smc}
+result <- smc(n_particles, priors, poiss_exp_sums, obs_data, dist, epsilon = epsilon, n_iter = 10)
+```
+
+```{r plot-convergence}
+library(ggplot2)
+
+result_matrices <- lapply(result, function(pop) {
+  do.call(rbind, lapply(pop, function(p) p$params))
+})
+
+for (col in 1:2) {
+
+  print(col)
+  result_matrices_column <- lapply(result_matrices, function(matrix) matrix[,col])
+
+
+  # create a data frame with one column for the iteration number and one column for the first element of the params
+  df <- data.frame(iteration = rep(1:length(result_matrices_column), sapply(result_matrices_column, length)),
+                   params = unlist(result_matrices_column))
+
+  # plot the KDEs
+  print(ggplot(df, aes(params, color = factor(iteration))) +
+          geom_density(alpha = 0.5) +
+          scale_fill_gradient(low = "blue", high = "red") +
+          xlab("First element of params") +
+          ylab("Density") +
+          ggtitle("Sequence of KDEs for the n-th element of the params") +
+          theme_classic())
+}
+```
