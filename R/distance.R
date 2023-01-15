@@ -6,6 +6,7 @@ euclidean_distance <- function(sim_data, obs_data) {
   #' @param sim_data Simulated data
   #' @param obs_data Observed data
   #' @return Euclidean distance
+  #' @export
   if (length(sim_data) != length(obs_data)) {
     stop("sim_data and obs_data must have the same length")
   }
@@ -19,6 +20,7 @@ wasserstein_distance <- function(sim_data, obs_data) {
   #' @param sim_data Simulated data
   #' @param obs_data Observed data
   #' @return Empirical Wasserstein distance
+  #' @export
   if (length(sim_data) != length(obs_data)) {
     stop("sim_data and obs_data must have the same length")
   }

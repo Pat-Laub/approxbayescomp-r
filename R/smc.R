@@ -10,6 +10,7 @@ sample_population_from_prior <- function(n_particles, sampling_functions,
   #' @param obs_data Observed data
   #' @param simulate_data Function that simulates data from a set of parameters
   #' @return A list of particles, each containing the parameters, weight, and distance
+  #' @noRd
   
   # Initialize empty list to store particles
   population <- list()
@@ -39,6 +40,7 @@ subset_population <- function(population, quantile = 0.9) {
   #' @param population List of particles
   #' @param quantile Quantile threshold for distance
   #' @return Subset of the population and the quantile threshold
+  #' @noRd
   
   distances <- sapply(population, function(p) p$distance)
   threshold <- quantile(distances, quantile)
@@ -47,19 +49,18 @@ subset_population <- function(population, quantile = 0.9) {
   return(list(subset = subset, quantile = threshold))
 }
 
-library(ks)
-
 fit_kde <- function(population) {
   #' Fits a kernel density estimate to the params part of each particle in the subset population
   #'
   #' @param population A population of theta particles.
   #' @return Fitted kernel density estimate
+  #' @noRd
   
   params_matrix <- do.call(rbind, lapply(population, function(particle) as.numeric(particle$params)))
   
   dim <- length(params_matrix[1,])
   
-  k <- kde(params_matrix) #, n = 50, d = dim)
+  k <- ks::kde(params_matrix) #, n = 50, d = dim)
   
   return(k)
 }
@@ -74,13 +75,14 @@ sample_population_from_kde <- function(n_particles, kde, density_functions, dist
   #' @param distance_function Function to calculate the distance between the fake data and the observed data
   #' @param epsilon Maximum distance for a particle to be accepted
   #' @return List of particles with params, weight, and distance
+  #' @noRd
   
   particles <- list()
   n_accepted <- 0
   d <- length(obs_data)
   
   while(n_accepted < n_particles){
-    params <- rkde(1, kde)
+    params <- ks::rkde(1, kde)
     
     weight <- 1
     for (j in 1:length(density_functions)) {
@@ -94,7 +96,7 @@ sample_population_from_kde <- function(n_particles, kde, density_functions, dist
     distance <- distance_function(fake_data, obs_data)
     
     if(distance < epsilon){
-      weight <- weight / dkde(as.numeric(params), kde)
+      weight <- weight / ks::dkde(as.numeric(params), kde)
       particles[[n_accepted+1]] <- list(params=params, weight=weight, distance=distance)
       n_accepted <- n_accepted+1
     }
@@ -114,6 +116,7 @@ smc <- function(n_particles, priors, simulate_data, obs_data, distance_function,
   #' @param epsilon Maximum distance for a particle to be accepted
   #' @param n_iter Number of iterations
   #' @return List of populations
+  #' @export
   
   sampling_functions <- create_sampling_functions(priors)
   density_functions <- create_density_functions(priors)
