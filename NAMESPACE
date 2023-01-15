@@ -1,0 +1,3 @@
+useDynLib(approxbayescomp)
+import(RcppEigen)
+importFrom(Rcpp, evalCpp)
