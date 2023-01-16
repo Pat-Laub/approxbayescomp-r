@@ -1,11 +1,20 @@
 Package: approxbayescomp
 Type: Package
-Title: What the package does (short line)
+Title: Approximate Bayesian Computation
 Version: 1.0
 Date: 2023-01-12
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Author: Patrick Laub
+Authors@R: c(
+  person("Patrick", "Laub", email = "patrick.laub@gmail.com", role = c("aut", "cre")),
+  person("Pierre-Olivier", "Goffard", email = "", role = c("aut"))
+  )
+Description:
+    Approximate Bayesian Computation (ABC) is a statistical method to fit a
+    Bayesian model to data when the likelihood function is hard to compute.
+    The approxbayescomp package implements an efficient form of ABC - the
+    sequential Monte Carlo (SMC) algorithm. While it can handle any general
+    statistical problem, we built in some models so that fitting insurance
+    loss distributions is particularly easy.
 License: What license is it under?
 Imports: Rcpp (>= 1.0.9), RcppEigen, ks
 LinkingTo: Rcpp, RcppEigen

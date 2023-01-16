@@ -3,3 +3,7 @@
 export(euclidean_distance)
 export(smc)
 export(wasserstein_distance)
+import(Rcpp)
+import(RcppEigen)
+importFrom(Rcpp,evalCpp)
+useDynLib(approxbayescomp, .registration = TRUE)

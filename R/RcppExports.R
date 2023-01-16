@@ -2,18 +2,18 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 rcppeigen_hello_world <- function() {
-    .Call('_approxbayescomp_rcppeigen_hello_world', PACKAGE = 'approxbayescomp')
+    .Call(`_approxbayescomp_rcppeigen_hello_world`)
 }
 
 rcppeigen_outerproduct <- function(x) {
-    .Call('_approxbayescomp_rcppeigen_outerproduct', PACKAGE = 'approxbayescomp', x)
+    .Call(`_approxbayescomp_rcppeigen_outerproduct`, x)
 }
 
 rcppeigen_innerproduct <- function(x) {
-    .Call('_approxbayescomp_rcppeigen_innerproduct', PACKAGE = 'approxbayescomp', x)
+    .Call(`_approxbayescomp_rcppeigen_innerproduct`, x)
 }
 
 rcppeigen_bothproducts <- function(x) {
-    .Call('_approxbayescomp_rcppeigen_bothproducts', PACKAGE = 'approxbayescomp', x)
+    .Call(`_approxbayescomp_rcppeigen_bothproducts`, x)
 }
 
