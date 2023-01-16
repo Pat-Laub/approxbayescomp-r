@@ -11,3 +11,5 @@ Imports: Rcpp (>= 1.0.9), RcppEigen, ks
 LinkingTo: Rcpp, RcppEigen
 RoxygenNote: 7.2.3
 URL: https://pat-laub.github.io/approxbayescomp-r/
+Suggests: knitr, ggplot2, testthat, rmarkdown
+VignetteBuilder: knitr
