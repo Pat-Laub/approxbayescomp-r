@@ -1,0 +1,6 @@
+bibentry(bibtype = "Article",
+         title = "Approximate Bayesian Computations to fit and compare insurance loss models",
+         author = c(person("Pierre-Olivier", "Goffard"),
+                    person(c("Patrick", "J."), "Laub")),
+         year = "2021", journal="Insurance: Mathematics and Economics",
+         volume = "100", pages = "pp. 350-371")
