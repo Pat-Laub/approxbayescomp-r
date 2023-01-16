@@ -1,4 +1,3 @@
-
 # Convert the following Python code to R:
 #   Psi = collections.namedtuple("Psi", ["name", "param"], defaults=["sum", 0.0])
 
@@ -12,4 +11,3 @@ Psi <- function(name, param) {
 
 psi <- Psi("sum", 0.0)
 psi2 <- Psi("GSL", 0.5)
-
